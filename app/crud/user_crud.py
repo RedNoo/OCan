@@ -2,7 +2,6 @@ from app.models import User
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 from sqlalchemy import select
 
-
 class UserCrud:
     async def get_all(self, async_session: async_sessionmaker[AsyncSession]):
         print("async", async_session)
@@ -21,7 +20,7 @@ class UserCrud:
         async with async_session() as session:
             statement = select(User).filter(User.id == id)
             result = await session.execute(statement)
-            return result.scalars().one()
+            return result.scalars().one_or_none()
 
     async def update(
         self, async_session: async_sessionmaker[AsyncSession], id: int, data
@@ -31,8 +30,8 @@ class UserCrud:
             result = await session.execute(statement)
             user = result.scalars().one()
 
-            user.email = data.title
-            user.content = data.content
+            for var, value in vars(data).items():
+                setattr(user, var, value) if value else None
 
             await session.commit()
             return user

@@ -8,9 +8,10 @@ from app.crud import UserCrud
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from .db import engine
 from app.models import User
-from app.routes import user_routes
+from app.routes import auth_routes, user_routes
 
 #uvicorn app.main:app --reload
 app = FastAPI()
 
 app.include_router(user_routes.router)
+app.include_router(auth_routes.router)
