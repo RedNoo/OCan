@@ -20,13 +20,13 @@ async def login(user_credentials: OAuth2PasswordRequestForm = Depends()):
 
     if user is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail=f"Invalid Credintials ",
         )
 
     if not verify(user_credentials.password, user.password):
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail=f"Invalid Credintials ",
         )
 

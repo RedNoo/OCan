@@ -7,13 +7,10 @@ from app.crud.user_crud import UserCrud
 from app.db import engine
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from app.util import hash
+from app.oauth2 import get_current_user
 
 
-
-router = APIRouter(
-    prefix="/users",
-    tags=["Users"]
-)
+router = APIRouter(prefix="/users", tags=["Users"])
 session = async_sessionmaker(bind=engine, expire_on_commit=False)
 db = UserCrud()
 
@@ -26,8 +23,11 @@ async def get_user():
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
-async def create_user(user: CreateUser):
+async def create_user(
+    user: CreateUser, user_id: int = Depends(get_current_user)
+):
 
+    print("userid", user_id)
     hashed_password = hash(user.password)
     user.password = hashed_password
 
