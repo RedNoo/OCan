@@ -27,7 +27,6 @@ async def create_user(
     user: CreateUser, user_id: int = Depends(get_current_user)
 ):
 
-    print("userid", user_id)
     hashed_password = hash(user.password)
     user.password = hashed_password
 
