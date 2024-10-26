@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status, HTTPException, Response
 from app.db import engine
 from sqlalchemy.ext.asyncio import async_sessionmaker
-from app.schemas.auth_schema import UserLogin
+from app.schemas.auth_schema import UserLogin, Token
 from app.models.user import User
 from app.crud import AuthCrud
 from app.util import verify
@@ -14,7 +14,7 @@ session = async_sessionmaker(bind=engine, expire_on_commit=False)
 db = AuthCrud()
 
 
-@router.post("/login")
+@router.post("/login", response_model=Token)
 async def login(user_credentials: OAuth2PasswordRequestForm = Depends()):
     user = await db.get_by_email(session, user_credentials.username)
 

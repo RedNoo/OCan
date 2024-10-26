@@ -24,9 +24,9 @@ async def get_user():
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 async def create_user(
-    user: CreateUser, user_id: int = Depends(get_current_user)
+    user: CreateUser, current_user: int = Depends(get_current_user)
 ):
-
+    print(current_user.email)
     hashed_password = hash(user.password)
     user.password = hashed_password
 

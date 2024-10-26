@@ -3,6 +3,9 @@ from datetime import datetime, timedelta
 from app.schemas.auth_schema import Token, TokenData
 from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from app.crud.user_crud import UserCrud
+from sqlalchemy.ext.asyncio import async_sessionmaker
+from app.db import engine
 
 oauth_schema = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -31,7 +34,7 @@ def verify_access_token(token: str, credential_exception):
 
         if id is None:
             raise credential_exception
-       
+
         token_data = TokenData(id=id)
     except jwt.ExpiredSignatureError:
         raise credential_exception
@@ -41,12 +44,19 @@ def verify_access_token(token: str, credential_exception):
     return token_data
 
 
-def get_current_user(token: str = Depends(oauth_schema)):
-    
+async def get_current_user(token: str = Depends(oauth_schema)):
+
     credential_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail=f"Could nor validate credentials",
         headers={"WWW-Authebticate": "Bearer"},
     )
 
-    return verify_access_token(token, credential_exception)
+    token = verify_access_token(token, credential_exception)
+
+    db = UserCrud()
+    session = async_sessionmaker(bind=engine, expire_on_commit=False)
+
+    user = await db.get_by_id(session, token.id)
+
+    return user

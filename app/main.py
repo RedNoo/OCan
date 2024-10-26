@@ -18,3 +18,5 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 app.include_router(user_routes.router)
 app.include_router(auth_routes.router)
+
+#7:42
