@@ -2,7 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from app.db import Base
 from sqlalchemy import DateTime
-from app.models import Order, Cart
+
 
 class User(Base):
     __tablename__ = "users"

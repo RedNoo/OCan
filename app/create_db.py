@@ -1,10 +1,9 @@
-from db import Base, engine
+from app.db import Base, engine
 import asyncio
 
 async def create_db():
     async with engine.begin() as conn:
-        from models import User
-
+       
 
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
@@ -12,3 +11,4 @@ async def create_db():
     await engine.dispose()
 
 asyncio.run(create_db())
+

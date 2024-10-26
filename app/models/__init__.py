@@ -1,6 +1,9 @@
 from .user import User
-from .product import Product
 from .order import Order
-from .category import Category
+from .product import Product
 from .cart import Cart
+from .category import Category
 from .cart_item import CartItem
+
+
+
