@@ -1,23 +1,23 @@
-from app.models import User
+from app.models import Product
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 from sqlalchemy import select
 
-class UserCrud:
+class ProductCrud:
     async def get_all(self, async_session: async_sessionmaker[AsyncSession]):
         async with async_session() as session:
-            statement = select(User).order_by(User.id)
+            statement = select(Product).order_by(Product.id)
             result = await session.execute(statement)
             return result.scalars().all()
 
-    async def add(self, async_session: async_sessionmaker[AsyncSession], user: User):
+    async def add(self, async_session: async_sessionmaker[AsyncSession], user: Product):
         async with async_session() as session:
             session.add(user)
             await session.commit()
             return user
-
+    
     async def get_by_id(self, async_session: async_sessionmaker[AsyncSession], id: int):
         async with async_session() as session:
-            statement = select(User).filter(User.id == id)
+            statement = select(Product).filter(Product.id == id)
             result = await session.execute(statement)
             return result.scalars().one_or_none()
 
@@ -25,7 +25,7 @@ class UserCrud:
         self, async_session: async_sessionmaker[AsyncSession], id: int, data
     ):
         async with async_session() as session:
-            statement = select(User).filter(User.id == id)
+            statement = select(Product).filter(Product.id == id)
             result = await session.execute(statement)
             user = result.scalars().one()
 
@@ -35,7 +35,7 @@ class UserCrud:
             await session.commit()
             return user
 
-    async def delete(self, async_session: async_sessionmaker[AsyncSession], user: User):
+    async def delete(self, async_session: async_sessionmaker[AsyncSession], user: Product):
         async with async_session() as session:
             await session.delete(user)
             await session.commit()
