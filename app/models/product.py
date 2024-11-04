@@ -4,7 +4,6 @@ from app.db import Base
 from sqlalchemy import DateTime
 
 
-
 class Product(Base):
     __tablename__ = "products"
 
@@ -18,3 +17,5 @@ class Product(Base):
     categories: Mapped[list["Category"]] = relationship(
         "Category", back_populates="products"
     )
+
+    properties: Mapped[list["ProductProperty"]] = relationship("ProductProperty", back_populates="product_property")

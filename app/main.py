@@ -11,7 +11,7 @@ from app.models import User
 from app.routes import auth_routes, user_routes
 from fastapi.security import OAuth2PasswordBearer
 
-
+# python3 -m app.create_db
 # uvicorn app.main:app --reload
 app = FastAPI()
 
