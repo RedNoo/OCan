@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from app.db import Base
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, ForeignKey
 
 
 class Product(Base):
@@ -14,8 +14,17 @@ class Product(Base):
     price: Mapped[float] = mapped_column(nullable=False)
     stock: Mapped[int] = mapped_column(default=0)
 
-    categories: Mapped[list["Category"]] = relationship(
-        "Category", back_populates="products"
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=datetime.now()
+    )
+    created_id: Mapped[int] = mapped_column(nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(nullable=True)
+    updated_id: Mapped[int] = mapped_column(nullable=False)
+
+    properties: Mapped[list["ProductProperty"]] = relationship(
+        "ProductProperty", back_populates="product"
     )
 
-    properties: Mapped[list["ProductProperty"]] = relationship("ProductProperty", back_populates="product_property")
+    product_category: Mapped[list["ProductCategory"]] = relationship(
+        "ProductCategory", back_populates="products"
+    )

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.models.user import User
@@ -24,13 +24,13 @@ async def get_user():
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 async def create_user(
-    user: CreateUser, current_user: int = Depends(get_current_user)
+    request: Request,
+    user: CreateUser #, current_user: int = Depends(get_current_user)
 ):
-    print(current_user.email)
+    #   print(current_user.email)
     hashed_password = hash(user.password)
     user.password = hashed_password
-
-    new_user = User(**user.model_dump())
+    new_user = User(created_ip_address= request.client.host, **user.model_dump())
     new_user = await db.add(session, new_user)
     return new_user
 

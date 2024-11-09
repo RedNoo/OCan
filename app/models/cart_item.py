@@ -12,4 +12,4 @@ class CartItem(Base):
     quantity: Mapped[int] = mapped_column(nullable=False)
 
     cart: Mapped['Cart'] = relationship('Cart', back_populates='cart_items')
-    product: Mapped['Product'] = relationship('Product')
+    
